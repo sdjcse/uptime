@@ -4,8 +4,8 @@ mongodb:
   server:   localhost
   database: uptime
   user:     root 
-  password:
-  connectionString:       # alternative to setting server, database, user and password separately
+  password: 1234
+  connectionString:   mongodb://localhost:27017/uptime    # alternative to setting server, database, user and password separately
 
 monitor:
   name:                   origin
@@ -24,6 +24,7 @@ autoStartMonitor: true
 plugins:
   - ./plugins/console
   - ./plugins/patternMatcher
+  # setting http options for the server -
   - ./plugins/httpOptions
   # - ./plugins/email
   # - ./plugins/basicAuth

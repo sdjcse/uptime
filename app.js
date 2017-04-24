@@ -2,8 +2,13 @@
  * Monitor remote server uptime.
  */
 
+// used for asynch calls
 var http       = require('http');
+// relative path we should give the base path of node modules
+// we will have certain settings in the url object
+// npm url - google search
 var url        = require('url');
+// we can create one server
 var express    = require('express');
 var config     = require('config');
 var socketIo   = require('socket.io');
@@ -17,15 +22,18 @@ var apiApp     = require('./app/api/app');
 var dashboardApp = require('./app/dashboard/app');
 
 // database
-
+// this will go tto the bootstrap file
+// go to boostrap to get more details
 var mongoose   = require('./bootstrap');
 
 var a = analyzer.createAnalyzer(config.analyzer);
 a.start();
 
 // web front
-
+// creating an express app
+// this module will be available to all other scripts
 var app = module.exports = express();
+// hosting the created app in node
 var server = http.createServer(app);
 
 app.configure(function(){
@@ -44,14 +52,18 @@ app.configure(function(){
   app.set('pollerCollection', new PollerCollection());
 });
 
+// linking plugin to the application
 // load plugins (may add their own routes and middlewares)
 config.plugins.forEach(function(pluginName) {
   var plugin = require(pluginName);
   if (typeof plugin.initWebApp !== 'function') return;
   console.log('loading plugin %s on app', pluginName);
   plugin.initWebApp({
+      // managing and serving everything
     app:       app,
+      // http server part
     api:       apiApp,       // mounted into app, but required for events
+      // UI part of the application
     dashboard: dashboardApp, // mounted into app, but required for events
     io:        io,
     config:    config,
@@ -59,6 +71,7 @@ config.plugins.forEach(function(pluginName) {
   });
 });
 
+// check more about it - decides what should happen in root route
 app.emit('beforeFirstRoute', app, apiApp);
 
 app.configure('development', function() {

@@ -1,14 +1,24 @@
+// mongoose - mongodb driver
+
+
+
 var mongoose   = require('mongoose');
 var config     = require('config');
 var semver     = require('semver');
 
 // configure mongodb
+// functions invoked by the mongoose object
 mongoose.connect(config.mongodb.connectionString || 'mongodb://' + config.mongodb.user + ':' + config.mongodb.password + '@' + config.mongodb.server +'/' + config.mongodb.database);
+
+// handlers event handler to handle errors while connecting to server
 mongoose.connection.on('error', function (err) {
   console.error('MongoDB error: ' + err.message);
   console.error('Make sure a mongoDB server is running and accessible by this application');
   process.exit(1);
 });
+
+// event handlers - will be handled once connection is established
+// automatically called once connection is established
 mongoose.connection.on('open', function (err) {
   mongoose.connection.db.admin().serverStatus(function(err, data) {
     if (err) {

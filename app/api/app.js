@@ -1,5 +1,7 @@
 /**
  * Module dependencies.
+ *
+ *
  */
 var express    = require('express');
 var Check      = require('../../models/check');
